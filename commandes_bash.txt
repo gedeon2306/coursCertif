@@ -1,0 +1,33 @@
+# Aide-Mémoire Commandes Bash / Linux
+
+## 1. NAVIGATION & RÉPERTOIRES
+  cd [dossier]      Change de répertoire (cd / cd ~ = dossier personnel, cd .. = dossier parent)
+  ls                Liste le contenu du répertoire courant
+  ls -l             Affichage détaillé (permissions, taille, propriétaire, date)
+  ls -a             Affiche tous les fichiers, y compris les fichiers cachés (.nom_fichier)
+  ls -la            Combine le format détaillé (-l) et l'affichage des fichiers cachés (-a)
+
+## 2. GESTION DES FICHIERS & DOSSIERS
+  mkdir <dossier>   Crée un nouveau répertoire
+  rmdir <dossier>   Supprime un répertoire vide
+  touch <fichier>   Crée un fichier vide ou met à jour sa date de modification
+  rm <fichier>      Supprime un fichier
+  rm -r <dossier>   Supprime un dossier et tout son contenu de façon récursive
+  cp <src> <dest>   Copie un fichier vers une destination
+  cp -r <src> <d>   Copie un dossier et tout son contenu
+  mv <src> <dest>   Déplace ou renomme un fichier/dossier
+                      - Renommer : mv ancien.txt nouveau.txt
+                      - Déplacer : mv fichier.txt /dossier/
+
+## 3. LECTURE, ÉDITION & REDIRECTIONS
+  cat <fichier>     Affiche la totalité du contenu d'un fichier dans la console
+  more <fichier>    Affiche le contenu d'un fichier page par page (Espace pour défiler)
+  nano <fichier>    Ouvre un éditeur de texte interactif dans le terminal
+  echo "<texte>"    Affiche le texte dans le terminal
+  >  (Redirection)  Redirige la sortie et ÉCRASE le fichier cible (ex: echo "A" > fichier.txt)
+  >> (Redirection)  Redirige la sortie et AJOUTE à la fin du fichier (ex: echo "B" >> fichier.txt)
+
+## 4. RECHERCHE DE FICHIERS
+  find <dossier> -name "<nom>"   Recherche des fichiers par nom dans une arborescence
+                                   - Dans 'src' : find src -name "app.js"
+                                   - Tous les .txt : find . -name "*.txt"
