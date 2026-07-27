@@ -87,3 +87,4 @@ FULL JOIN actions a ON cs.action_id = a.action_id;
 TRUNCATE table_name;
 
 pg_dump --clean --create --inserts --username=freecodecamp database_name > file_name.sql
+psql -U postgres < file_name.sql
