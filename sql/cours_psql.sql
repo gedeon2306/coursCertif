@@ -1,3 +1,4 @@
+sudo service postgresql start
 psql --username=freecodecamp --dbname=postgres
 \l
 \c database_name
