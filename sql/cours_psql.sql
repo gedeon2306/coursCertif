@@ -82,3 +82,5 @@ on c.character_id = s.character_id;
 SELECT * FROM character_actions cs
 FULL JOIN characters c ON cs.character_id = c.character_id
 FULL JOIN actions a ON cs.action_id = a.action_id;
+
+TRUNCATE table_name;
