@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 const App = () => {
+  // Liste des anecdotes
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -11,31 +12,39 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
   ]
    
+  // État pour l'index de l'anecdote affichée
   const [selected, setSelected] = useState(0)
+  
+  // État pour le tableau de votes (initialisé avec des 0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
+  // Choisit une anecdote au hasard
   const handleNextAnecdote = () => {
     const randomIndex = Math.floor(Math.random() * anecdotes.length)
     setSelected(randomIndex)
   }
 
+  // Ajoute 1 vote à l'anecdote courante
   const handleVote = () => {
-    const copy = [...votes]
+    const copy = [...votes] // Copie du tableau pour ne pas modifier l'état directement
     copy[selected] += 1
     setVotes(copy)
   }
 
+  // Trouve le nombre max de votes et l'index correspondant
   const maxVotes = Math.max(...votes)
   const mostVotedIndex = votes.indexOf(maxVotes)
 
   return (
     <div>
+      {/* Section : Anecdote du jour */}
       <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleNextAnecdote}>next anecdote</button>
 
+      {/* Section : Anecdote la plus votée */}
       <h2>Anecdote with most votes</h2>
       {maxVotes === 0 ? (
         <p>No votes yet</p>
