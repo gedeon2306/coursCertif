@@ -1,7 +1,9 @@
+// Affiche le titre du cours
 const Header = (props) => {
   return <h1>{props.course.name}</h1>
 }
 
+// Affiche une ligne (nom + nombre d'exercices)
 const Part = (props) => {
   return (
     <p>
@@ -10,6 +12,7 @@ const Part = (props) => {
   )
 }
 
+// Affiche les 3 parties du cours
 const Content = (props) => {
   return (
     <div>
@@ -20,12 +23,15 @@ const Content = (props) => {
   )
 }
 
+// Calcule et affiche le total des exercices
 const Total = (props) => {
   const total = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
   return <p>Number of exercises {total}</p>
 }
 
+// Composant principal
 const App = () => {
+  // Données du cours
   const course = {
     name: 'Half Stack application development',
     parts: [
@@ -44,6 +50,7 @@ const App = () => {
     ]
   }
 
+  // Structure de la page
   return (
     <div>
       <Header course={course} />
