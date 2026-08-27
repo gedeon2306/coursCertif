@@ -29,3 +29,33 @@ Aide-Mémoire Commandes Bash / Linux
   2>                 Redirige la sortie d'erreur (stderr) vers un fichier
   <                  Redirige l'entrée standard (stdin) depuis un fichier
   | (pipe)           Passe la sortie d'une commande en entrée à une autre (ex: cmd1 | cmd2)
+
+## 4. RECHERCHE, COMPTAGE & TRAITEMENT DE TEXTE
+  find <dossier> -name "<nom>"
+                       Recherche des fichiers par nom dans une arborescence
+                       - Dans 'src' : find src -name "app.js"
+                       - Tous les .txt : find . -name "*.txt"
+
+  wc <fichier>       Compte les lignes, mots et octets/caractères d'un fichier
+                       - wc -l : Compte uniquement les lignes
+                       - wc -w : Compte uniquement les mots
+                       - wc -m ou -c : Compte les caractères / octets
+
+  grep '<motif>' <fichier>
+                       Cherche un texte ou motif dans un fichier
+                       - -i : Ignore la casse (majuscules/minuscules)
+                       - -n : Affiche le numéro des lignes trouvées
+                       - -v : Inverse la recherche (affiche les lignes ne contenant pas le motif)
+                       - -c : Compte le nombre de lignes correspondantes
+                       - -o : Extrait et affiche uniquement la partie exacte qui correspond au motif
+                       - --color : Surligne en couleur le motif trouvé dans la console
+
+  sed 's/ancien/nouveau/' <fichier>
+                       Éditeur de flux pour substituer ou modifier du texte
+                       - sed 's/r/2/' f.txt : Remplace la 1ère occurrence de chaque ligne
+                       - sed 's/r/2/g' f.txt : Remplace toutes les occurrences (substitution globale)
+                       - sed -E 's/([0-9]+).*/\1/' : Utilise les regex étendues (ex: groupes (), +)
+                       - sed -i 's/a/b/g' f.txt : Modifie directement le fichier d'origine (in-place)
+                       - sed -i '3d' f.txt : Supprime la 3ème ligne du fichier
+                       - sed -i '/erreur/d' f.txt : Supprime les lignes contenant 'erreur'
+                       - sed -i '2i texte' f.txt : Insère du texte à la ligne 2
