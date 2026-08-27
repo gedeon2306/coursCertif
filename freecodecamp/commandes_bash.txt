@@ -116,3 +116,26 @@ Aide-Mémoire Commandes Bash / Linux
   done
 
   sleep 3                 Fait une pause de 3 secondes
+
+## 9. CALCULS & NOMBRES ALÉATOIRES
+  (( ... ))                Effectue un calcul ou une opération sans rien afficher
+  $(( ... ))               Remplace le calcul par son résultat
+  NUMBER=$RANDOM          Nombre aléatoire (0 à 32767)
+  NUMBER=$(( RANDOM % 75 + 1 )) Nombre aléatoire entre 1 et 75
+
+## 10. TABLEAUX & FONCTIONS
+  ARR=("a" "b" "c")
+  echo ${ARR[1]}            Affiche le 2ème élément ("b")
+  echo ${ARR[*]} / echo ${ARR[@]}  Affiche tous les éléments du tableau
+
+  FUNCTION_NAME() {
+    STATEMENTS
+  }
+
+## 11. COMMENTAIRES
+  # Commentaire sur une ligne
+
+  : '
+    Commentaire sur
+    plusieurs lignes
+  '
