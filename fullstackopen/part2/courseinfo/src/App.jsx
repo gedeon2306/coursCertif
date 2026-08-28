@@ -1,9 +1,7 @@
-// En-tête : on déstructure directement "course" depuis les props
 const Header = ({ course }) => {
   return <h1>{course.name}</h1>
 }
 
-// Composant pour une ligne unique (nom de la partie + nombre d'exercices)
 const Part = ({ part }) => {
   return (
     <p>
@@ -12,11 +10,9 @@ const Part = ({ part }) => {
   )
 }
 
-// Content : parcourt le tableau "parts" avec .map()
 const Content = ({ parts }) => {
   return (
     <div>
-      {/* Chaque élément issu d'un .map() nécessite une prop "key" unique */}
       {parts.map((part) => (
         <Part key={part.id} part={part} />
       ))}
@@ -24,18 +20,24 @@ const Content = ({ parts }) => {
   )
 }
 
-// Composant englobant qui assemble l'en-tête et la liste
+// Composant Total : calcule la somme totale des exercices
+const Total = ({ parts }) => {
+  // .reduce() parcourt le tableau et accumule le total des exercices
+  const total = parts.reduce((sum, part) => sum + part.exercises, 0)
+
+  return <strong>total of {total} exercises</strong>
+}
+
 const Course = ({ course }) => {
   return (
     <div>
       <Header course={course} />
-      {/* On transmet uniquement le tableau "parts" au composant Content */}
       <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
 
-// Composant racine contenant les données du cours
 const App = () => {
   const course = {
     id: 1,
@@ -55,6 +57,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
