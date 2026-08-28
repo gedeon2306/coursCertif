@@ -6,22 +6,29 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
-  // Gère la saisie dans le champ de texte
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
-  // Gère l'ajout d'une nouvelle personne lors de la soumission du formulaire
   const addPerson = (event) => {
-    event.preventDefault() // Empêche le rechargement de la page
-    
+    event.preventDefault()
+
+    // Vérifie si le nom existe déjà dans le répertoire
+    const nameExists = persons.some(
+      (person) => person.name.toLowerCase() === newName.trim().toLowerCase()
+    )
+
+    if (nameExists) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     const personObject = {
       name: newName
     }
 
-    // Ajoute la nouvelle personne sans muter le tableau d'état d'origine
     setPersons(persons.concat(personObject))
-    setNewName('') // Réinitialise le champ de saisie
+    setNewName('')
   }
 
   return (
