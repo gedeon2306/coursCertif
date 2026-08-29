@@ -27,11 +27,14 @@ const PersonForm = ({
   </form>
 )
 
-const Persons = ({ personsToShow }) => (
+const Persons = ({ personsToShow, handleDelete }) => (
   <div>
     {personsToShow.map((person) => (
       <p key={person.id}>
-        {person.name} {person.number}
+        {person.name} {person.number}{' '}
+        <button onClick={() => handleDelete(person.id, person.name)}>
+          delete
+        </button>
       </p>
     ))}
   </div>
@@ -43,13 +46,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  // Récupération initiale des données via le service
   useEffect(() => {
-    personService
-      .getAll()
-      .then((initialPersons) => {
-        setPersons(initialPersons)
-      })
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons)
+    })
   }, [])
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -59,30 +59,65 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const nameExists = persons.some(
-      (person) => person.name.toLowerCase() === newName.trim().toLowerCase()
+    // Recherche si la personne existe déjà dans le tableau
+    const existingPerson = persons.find(
+      (p) => p.name.toLowerCase() === newName.trim().toLowerCase()
     )
 
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
+    if (existingPerson) {
+      // Demande de confirmation pour modifier le numéro
+      const ok = window.confirm(
+        `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`
+      )
+
+      if (ok) {
+        const changedPerson = { ...existingPerson, number: newNumber }
+
+        personService
+          .update(existingPerson.id, changedPerson)
+          .then((returnedPerson) => {
+            // Remplace l'ancien objet par la réponse retournée par le serveur
+            setPersons(
+              persons.map((p) => (p.id !== existingPerson.id ? p : returnedPerson))
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(() => {
+            alert(
+              `Information of '${existingPerson.name}' has already been removed from server`
+            )
+            setPersons(persons.filter((p) => p.id !== existingPerson.id))
+          })
+      }
       return
     }
 
+    // Si la personne n'existe pas, création standard (POST)
     const personObject = {
       name: newName,
       number: newNumber
-      // L'id est généré automatiquement par le serveur
     }
 
-    // Envoi HTTP POST vers json-server
-    personService
-      .create(personObject)
-      .then((returnedPerson) => {
-        // On ajoute la réponse du serveur (qui contient l'id généré) au state
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
+  }
+
+  const deletePersonOf = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== id))
+        })
+        .catch(() => {
+          alert(`The person '${name}' was already deleted from server`)
+          setPersons(persons.filter((p) => p.id !== id))
+        })
+    }
   }
 
   const personsToShow = persons.filter((person) =>
@@ -107,7 +142,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={deletePersonOf} />
     </div>
   )
 }
