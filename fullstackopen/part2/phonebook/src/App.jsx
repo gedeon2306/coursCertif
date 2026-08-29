@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const Filter = ({ filter, handleFilterChange }) => (
   <div>
@@ -38,20 +38,19 @@ const Persons = ({ personsToShow }) => (
 )
 
 const App = () => {
-  // Initialisation à un tableau vide
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  // Hook d'effet pour charger les données depuis le serveur json-server
+  // Récupération initiale des données via le service
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then((response) => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then((initialPersons) => {
+        setPersons(initialPersons)
       })
-  }, []) // Le tableau vide [] garantit que l'effet ne s'exécute qu'une seule fois au montage
+  }, [])
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -71,13 +70,19 @@ const App = () => {
 
     const personObject = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
+      // L'id est généré automatiquement par le serveur
     }
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    // Envoi HTTP POST vers json-server
+    personService
+      .create(personObject)
+      .then((returnedPerson) => {
+        // On ajoute la réponse du serveur (qui contient l'id généré) au state
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const personsToShow = persons.filter((person) =>
