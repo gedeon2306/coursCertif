@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
-const Filter = ({ filter, handleFilterChange }) => (
+const Filter = ({ value, onChange }) => (
   <div>
-    filter shown with <input value={filter} onChange={handleFilterChange} />
+    filter shown with <input value={value} onChange={onChange} />
   </div>
 )
 
 const PersonForm = ({
-  addPerson,
-  newName,
-  handleNameChange,
-  newNumber,
-  handleNumberChange
+  onSubmit,
+  nameValue,
+  onNameChange,
+  phoneValue,
+  onPhoneChange
 }) => (
-  <form onSubmit={addPerson}>
+  <form onSubmit={onSubmit}>
     <div>
-      name: <input value={newName} onChange={handleNameChange} />
+      name: <input value={nameValue} onChange={onNameChange} />
     </div>
     <div>
-      number: <input value={newNumber} onChange={handleNumberChange} />
+      number: <input value={phoneValue} onChange={onPhoneChange} />
     </div>
     <div>
       <button type="submit">add</button>
@@ -27,12 +28,12 @@ const PersonForm = ({
   </form>
 )
 
-const Persons = ({ personsToShow, handleDelete }) => (
+const Persons = ({ list, onDelete }) => (
   <div>
-    {personsToShow.map((person) => (
-      <p key={person.id}>
-        {person.name} {person.number}{' '}
-        <button onClick={() => handleDelete(person.id, person.name)}>
+    {list.map((entry) => (
+      <p key={entry.id}>
+        {entry.name} {entry.number}{' '}
+        <button onClick={() => onDelete(entry.id, entry.name)}>
           delete
         </button>
       </p>
@@ -41,108 +42,135 @@ const Persons = ({ personsToShow, handleDelete }) => (
 )
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
+  const [contacts, setContacts] = useState([])
+  const [nameInput, setNameInput] = useState('')
+  const [phoneInput, setPhoneInput] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  
+  // Regroupement de l'état de notification sous un seul objet
+  const [banner, setBanner] = useState({ text: null, type: 'success' })
 
   useEffect(() => {
-    personService.getAll().then((initialPersons) => {
-      setPersons(initialPersons)
+    personService.getAll().then((data) => {
+      setContacts(data)
     })
   }, [])
 
-  const handleNameChange = (event) => setNewName(event.target.value)
-  const handleNumberChange = (event) => setNewNumber(event.target.value)
-  const handleFilterChange = (event) => setFilter(event.target.value)
+  const displayNotification = (text, type = 'success') => {
+    setBanner({ text, type })
+    setTimeout(() => {
+      setBanner({ text: null, type: 'success' })
+    }, 5000)
+  }
 
-  const addPerson = (event) => {
-    event.preventDefault()
+  const resetFormFields = () => {
+    setNameInput('')
+    setPhoneInput('')
+  }
 
-    // Recherche si la personne existe déjà dans le tableau
-    const existingPerson = persons.find(
-      (p) => p.name.toLowerCase() === newName.trim().toLowerCase()
+  // Traitement d'une mise à jour de numéro (PUT)
+  const updateExistingContact = (existingContact) => {
+    const confirmation = window.confirm(
+      `${existingContact.name} is already added to phonebook, replace the old number with a new one?`
     )
 
-    if (existingPerson) {
-      // Demande de confirmation pour modifier le numéro
-      const ok = window.confirm(
-        `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`
-      )
+    if (!confirmation) return
 
-      if (ok) {
-        const changedPerson = { ...existingPerson, number: newNumber }
+    const updatedContact = { ...existingContact, number: phoneInput }
 
-        personService
-          .update(existingPerson.id, changedPerson)
-          .then((returnedPerson) => {
-            // Remplace l'ancien objet par la réponse retournée par le serveur
-            setPersons(
-              persons.map((p) => (p.id !== existingPerson.id ? p : returnedPerson))
-            )
-            setNewName('')
-            setNewNumber('')
-          })
-          .catch(() => {
-            alert(
-              `Information of '${existingPerson.name}' has already been removed from server`
-            )
-            setPersons(persons.filter((p) => p.id !== existingPerson.id))
-          })
-      }
-      return
-    }
-
-    // Si la personne n'existe pas, création standard (POST)
-    const personObject = {
-      name: newName,
-      number: newNumber
-    }
-
-    personService.create(personObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson))
-      setNewName('')
-      setNewNumber('')
-    })
+    personService
+      .update(existingContact.id, updatedContact)
+      .then((savedData) => {
+        setContacts(
+          contacts.map((c) => (c.id !== existingContact.id ? c : savedData))
+        )
+        resetFormFields()
+        displayNotification(`Updated number for ${savedData.name}`)
+      })
+      .catch(() => {
+        displayNotification(
+          `Information of '${existingContact.name}' has already been removed from server`,
+          'error'
+        )
+        setContacts(contacts.filter((c) => c.id !== existingContact.id))
+      })
   }
 
-  const deletePersonOf = (id, name) => {
-    if (window.confirm(`Delete ${name} ?`)) {
-      personService
-        .remove(id)
-        .then(() => {
-          setPersons(persons.filter((p) => p.id !== id))
-        })
-        .catch(() => {
-          alert(`The person '${name}' was already deleted from server`)
-          setPersons(persons.filter((p) => p.id !== id))
-        })
+  // Traitement d'un ajout standard (POST)
+  const createNewContact = () => {
+    const newEntry = { name: nameInput, number: phoneInput }
+
+    personService
+      .create(newEntry)
+      .then((createdEntry) => {
+        setContacts(contacts.concat(createdEntry))
+        resetFormFields()
+        displayNotification(`Added ${createdEntry.name}`)
+      })
+      .catch(() => {
+        displayNotification(`Failed to add ${newEntry.name}`, 'error')
+      })
+  }
+
+  const savePerson = (event) => {
+    event.preventDefault()
+
+    const targetName = nameInput.trim().toLowerCase()
+    const duplicate = contacts.find((c) => c.name.toLowerCase() === targetName)
+
+    if (duplicate) {
+      updateExistingContact(duplicate)
+    } else {
+      createNewContact()
     }
   }
 
-  const personsToShow = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
+  const handleRemovePerson = (id, name) => {
+    if (!window.confirm(`Delete ${name} ?`)) return
+
+    personService
+      .remove(id)
+      .then(() => {
+        setContacts(contacts.filter((c) => c.id !== id))
+        displayNotification(`Deleted ${name}`)
+      })
+      .catch(() => {
+        displayNotification(
+          `Information of '${name}' has already been removed from server`,
+          'error'
+        )
+        setContacts(contacts.filter((c) => c.id !== id))
+      })
+  }
+
+  const visibleContacts = contacts.filter((c) =>
+    c.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
     <div>
       <h2>Phonebook</h2>
 
-      <Filter filter={filter} handleFilterChange={handleFilterChange} />
+      <Notification message={banner.text} type={banner.type} />
+
+      <Filter
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
       <h3>Add a new</h3>
 
       <PersonForm
-        addPerson={addPerson}
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
+        onSubmit={savePerson}
+        nameValue={nameInput}
+        onNameChange={(e) => setNameInput(e.target.value)}
+        phoneValue={phoneInput}
+        onPhoneChange={(e) => setPhoneInput(e.target.value)}
       />
 
       <h3>Numbers</h3>
 
-      <Persons personsToShow={personsToShow} handleDelete={deletePersonOf} />
+      <Persons list={visibleContacts} onDelete={handleRemovePerson} />
     </div>
   )
 }
