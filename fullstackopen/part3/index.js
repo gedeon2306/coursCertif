@@ -6,6 +6,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 
 // Exercice 3.8 : Définition d'un token personnalisé pour morgan
 morgan.token('body', (req) => {
