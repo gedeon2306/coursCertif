@@ -1,0 +1,8 @@
+Aide-Mémoire Commandes Bash / Linux
+
+## 1. NAVIGATION & RÉPERTOIRES
+  cd [dossier]      Change de répertoire (cd / cd ~ = dossier personnel, cd .. = dossier parent)
+  ls                Liste le contenu du répertoire courant
+  ls -l             Affichage détaillé (permissions, taille, propriétaire, date)
+  ls -a             Affiche tous les fichiers, y compris les fichiers cachés (.nom_fichier)
+  ls -la            Combine le format détaillé (-l) et l'affichage des fichiers cachés (-a)
