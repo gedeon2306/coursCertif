@@ -98,3 +98,9 @@ Aide-Mémoire Commandes Bash / Linux
       -eq (égal), -ne (différent), -lt (inférieur), -le (inférieur/égal), -gt (supérieur), -ge (supérieur/égal)
       -a (fichier existe), -x (fichier exécutable)
   - Opérateurs logiques : && (ET), || (OU)
+
+## 8. BOUCLES & PAUSES
+  for (( i = 10; i > 0; i-- ))
+  do
+    echo $i
+  done
