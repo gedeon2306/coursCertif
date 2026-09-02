@@ -104,3 +104,15 @@ Aide-Mémoire Commandes Bash / Linux
   do
     echo $i
   done
+
+  while [[ CONDITION ]]
+  do
+    STATEMENTS
+  done
+
+  until [[ CONDITION ]]
+  do
+    STATEMENTS
+  done
+
+  sleep 3                 Fait une pause de 3 secondes
