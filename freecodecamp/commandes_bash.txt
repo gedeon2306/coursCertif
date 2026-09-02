@@ -85,3 +85,8 @@ Aide-Mémoire Commandes Bash / Linux
   else
     STATEMENTS
   fi
+
+  if (( CONDITION ))
+  then
+    STATEMENTS
+  fi
