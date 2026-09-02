@@ -29,3 +29,14 @@ Aide-Mémoire Commandes Bash / Linux
   2>                 Redirige la sortie d'erreur (stderr) vers un fichier
   <                  Redirige l'entrée standard (stdin) depuis un fichier
   | (pipe)           Passe la sortie d'une commande en entrée à une autre (ex: cmd1 | cmd2)
+
+## 4. RECHERCHE, COMPTAGE & TRAITEMENT DE TEXTE
+  find <dossier> -name "<nom>"
+                       Recherche des fichiers par nom dans une arborescence
+                       - Dans 'src' : find src -name "app.js"
+                       - Tous les .txt : find . -name "*.txt"
+
+  wc <fichier>       Compte les lignes, mots et octets/caractères d'un fichier
+                       - wc -l : Compte uniquement les lignes
+                       - wc -w : Compte uniquement les mots
+                       - wc -m ou -c : Compte les caractères / octets
