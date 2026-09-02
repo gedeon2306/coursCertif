@@ -6,3 +6,15 @@ Aide-Mémoire Commandes Bash / Linux
   ls -l             Affichage détaillé (permissions, taille, propriétaire, date)
   ls -a             Affiche tous les fichiers, y compris les fichiers cachés (.nom_fichier)
   ls -la            Combine le format détaillé (-l) et l'affichage des fichiers cachés (-a)
+
+## 2. GESTION DES FICHIERS & DOSSIERS
+  mkdir <dossier>    Crée un nouveau répertoire
+  rmdir <dossier>    Supprime un répertoire vide
+  touch <fichier>    Crée un fichier vide ou met à jour sa date de modification
+  rm <fichier>        Supprime un fichier
+  rm -r <dossier>    Supprime un dossier et tout son contenu de façon récursive
+  cp <src> <dest>    Copie un fichier vers une destination
+  cp -r <src> <dest> Copie un dossier et tout son contenu
+  mv <src> <dest>    Déplace ou renomme un fichier/dossier
+                       - Renommer : mv ancien.txt nouveau.txt
+                       - Déplacer : mv fichier.txt /dossier/
