@@ -18,3 +18,14 @@ Aide-Mémoire Commandes Bash / Linux
   mv <src> <dest>    Déplace ou renomme un fichier/dossier
                        - Renommer : mv ancien.txt nouveau.txt
                        - Déplacer : mv fichier.txt /dossier/
+
+## 3. LECTURE, ÉDITION, FLUX & REDIRECTIONS
+  cat <fichier>      Affiche la totalité du contenu d'un fichier dans la console
+  more <fichier>     Affiche le contenu d'un fichier page par page (Espace pour défiler)
+  nano <fichier>     Ouvre un éditeur de texte interactif dans le terminal
+  echo "<texte>"     Affiche le texte dans le terminal
+  > ou 1>            Redirige la sortie standard (stdout) et ÉCRASE le fichier cible
+  >> ou 1>>          Redirige la sortie standard (stdout) et AJOUTE à la fin du fichier
+  2>                 Redirige la sortie d'erreur (stderr) vers un fichier
+  <                  Redirige l'entrée standard (stdin) depuis un fichier
+  | (pipe)           Passe la sortie d'une commande en entrée à une autre (ex: cmd1 | cmd2)
