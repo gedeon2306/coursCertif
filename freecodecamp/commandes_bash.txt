@@ -79,4 +79,9 @@ Aide-Mémoire Commandes Bash / Linux
   if [[ CONDITION ]]
   then
     STATEMENTS
- 
+  elif [[ CONDITION ]]
+  then
+    STATEMENTS
+  else
+    STATEMENTS
+  fi
