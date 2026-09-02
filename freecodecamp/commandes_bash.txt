@@ -74,3 +74,9 @@ Aide-Mémoire Commandes Bash / Linux
   [[ -a file.sh ]]; echo $? Vérifie l'existence d'un fichier (0 si existe)
   ( I=6; J=7 )            Affectation de variables
   declare -p J            Affiche le type et la valeur de la variable J
+
+## 7. STRUCTURES CONDITIONNELLES (if / elif / else)
+  if [[ CONDITION ]]
+  then
+    STATEMENTS
+ 
