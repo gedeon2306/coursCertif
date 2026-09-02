@@ -90,3 +90,11 @@ Aide-Mémoire Commandes Bash / Linux
   then
     STATEMENTS
   fi
+
+  Remarques sur les conditions :
+  - [[ ... ]] utilise (-eq, -ne, -lt, -le, -gt, -ge)
+  - (( ... )) utilise (>, <, >=, <=, ==, !=)
+  - Options de comparaison entiers/fichiers :
+      -eq (égal), -ne (différent), -lt (inférieur), -le (inférieur/égal), -gt (supérieur), -ge (supérieur/égal)
+      -a (fichier existe), -x (fichier exécutable)
+  - Opérateurs logiques : && (ET), || (OU)
