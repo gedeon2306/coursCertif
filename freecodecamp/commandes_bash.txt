@@ -116,3 +116,9 @@ Aide-Mémoire Commandes Bash / Linux
   done
 
   sleep 3                 Fait une pause de 3 secondes
+
+## 9. CALCULS & NOMBRES ALÉATOIRES
+  (( ... ))                Effectue un calcul ou une opération sans rien afficher
+  $(( ... ))               Remplace le calcul par son résultat
+  NUMBER=$RANDOM          Nombre aléatoire (0 à 32767)
+  NUMBER=$(( RANDOM % 75 + 1 )) Nombre aléatoire entre 1 et 75
