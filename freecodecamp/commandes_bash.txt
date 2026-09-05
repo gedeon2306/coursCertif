@@ -90,3 +90,29 @@ Aide-Mémoire Commandes Bash / Linux
   then
     STATEMENTS
   fi
+
+  Remarques sur les conditions :
+  - [[ ... ]] utilise (-eq, -ne, -lt, -le, -gt, -ge)
+  - (( ... )) utilise (>, <, >=, <=, ==, !=)
+  - Options de comparaison entiers/fichiers :
+      -eq (égal), -ne (différent), -lt (inférieur), -le (inférieur/égal), -gt (supérieur), -ge (supérieur/égal)
+      -a (fichier existe), -x (fichier exécutable)
+  - Opérateurs logiques : && (ET), || (OU)
+
+## 8. BOUCLES & PAUSES
+  for (( i = 10; i > 0; i-- ))
+  do
+    echo $i
+  done
+
+  while [[ CONDITION ]]
+  do
+    STATEMENTS
+  done
+
+  until [[ CONDITION ]]
+  do
+    STATEMENTS
+  done
+
+  sleep 3                 Fait une pause de 3 secondes
