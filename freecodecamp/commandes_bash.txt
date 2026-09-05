@@ -11,4 +11,11 @@ Aide-Mémoire Commandes Bash / Linux
   mkdir <dossier>    Crée un nouveau répertoire
   rmdir <dossier>    Supprime un répertoire vide
   touch <fichier>    Crée un fichier vide ou met à jour sa date de modification
- 
+  rm <fichier>        Supprime un fichier
+  rm -r <dossier>    Supprime un dossier et tout son contenu de façon récursive
+  cp <src> <dest>    Copie un fichier vers une destination
+  cp -r <src> <dest> Copie un dossier et tout son contenu
+  mv <src> <dest>    Déplace ou renomme un fichier/dossier
+                       - Renommer : mv ancien.txt nouveau.txt
+                       - Déplacer : mv fichier.txt /dossier/
+
