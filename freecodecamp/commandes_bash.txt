@@ -1,1 +1,6 @@
 Aide-Mémoire Commandes Bash / Linux
+
+## 1. NAVIGATION & RÉPERTOIRES
+  cd [dossier]      Change de répertoire (cd / cd ~ = dossier personnel, cd .. = dossier parent)
+  ls                Liste le contenu du répertoire courant
+ 
