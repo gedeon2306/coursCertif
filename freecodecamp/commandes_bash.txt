@@ -41,3 +41,11 @@ Aide-Mémoire Commandes Bash / Linux
                        - wc -w : Compte uniquement les mots
                        - wc -m ou -c : Compte les caractères / octets
 
+  grep '<motif>' <fichier>
+                       Cherche un texte ou motif dans un fichier
+                       - -i : Ignore la casse (majuscules/minuscules)
+                       - -n : Affiche le numéro des lignes trouvées
+                       - -v : Inverse la recherche (affiche les lignes ne contenant pas le motif)
+                       - -c : Compte le nombre de lignes correspondantes
+                       - -o : Extrait et affiche uniquement la partie exacte qui correspond au motif
+                       - --color : Surligne en couleur le motif trouvé dans la console
