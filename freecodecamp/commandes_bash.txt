@@ -19,3 +19,8 @@ Aide-Mémoire Commandes Bash / Linux
                        - Renommer : mv ancien.txt nouveau.txt
                        - Déplacer : mv fichier.txt /dossier/
 
+## 3. LECTURE, ÉDITION, FLUX & REDIRECTIONS
+  cat <fichier>      Affiche la totalité du contenu d'un fichier dans la console
+  more <fichier>     Affiche le contenu d'un fichier page par page (Espace pour défiler)
+  nano <fichier>     Ouvre un éditeur de texte interactif dans le terminal
+ 
