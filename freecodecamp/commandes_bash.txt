@@ -59,3 +59,9 @@ Aide-Mémoire Commandes Bash / Linux
                        - sed -i '3d' f.txt : Supprime la 3ème ligne du fichier
                        - sed -i '/erreur/d' f.txt : Supprime les lignes contenant 'erreur'
                        - sed -i '2i texte' f.txt : Insère du texte à la ligne 2
+
+## 5. EXÉCUTION DE SCRIPTS & PERMISSIONS
+  which bash              Affiche le chemin vers l'exécutable Bash
+  #!/usr/bin/bash         Shebang à placer en 1ère ligne du script
+  chmod +x file.sh        Rend le script exécutable
+  sh file.sh / bash file.sh / ./file.sh   Méthodes d'exécution d'un script
