@@ -35,3 +35,9 @@ Aide-Mémoire Commandes Bash / Linux
                        Recherche des fichiers par nom dans une arborescence
                        - Dans 'src' : find src -name "app.js"
                        - Tous les .txt : find . -name "*.txt"
+
+  wc <fichier>       Compte les lignes, mots et octets/caractères d'un fichier
+                       - wc -l : Compte uniquement les lignes
+                       - wc -w : Compte uniquement les mots
+                       - wc -m ou -c : Compte les caractères / octets
+
