@@ -65,3 +65,12 @@ Aide-Mémoire Commandes Bash / Linux
   #!/usr/bin/bash         Shebang à placer en 1ère ligne du script
   chmod +x file.sh        Rend le script exécutable
   sh file.sh / bash file.sh / ./file.sh   Méthodes d'exécution d'un script
+
+## 6. VARIABLES & ENTRÉES / SORTIES
+  read Name                Lit une saisie utilisateur (read VAR < file.txt lit la 1ère ligne)
+  $* ou $@                 Ensemble des arguments passés au script
+  $?                       Code de retour de la dernière commande (0 = succès, non-zéro = erreur)
+  [[ 4 -ge 5 ]]; echo $?  Affiche le statut d'exécution
+  [[ -a file.sh ]]; echo $? Vérifie l'existence d'un fichier (0 si existe)
+  ( I=6; J=7 )            Affectation de variables
+  declare -p J            Affiche le type et la valeur de la variable J
