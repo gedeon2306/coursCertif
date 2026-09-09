@@ -25,7 +25,7 @@ const Person = mongoose.model('Person', personSchema)
 
 mongoose
 .connect(url)
-.then((result) => {
+.then(() => {
     // CAS 1 : Seul le mot de passe est fourni -> Afficher tous les contacts
     if (process.argv.length === 3) {
       Person.find({}).then(result => {
