@@ -12,13 +12,29 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
-// Définition du schéma
+// 3.20 : Fonction de validation personnalisée pour le format du numéro de téléphone
+const phoneValidator = (value) => {
+  // 2 ou 3 chiffres, un tiret, puis au moins 5 chiffres (longueur totale >= 8)
+  return /^\d{2,3}-\d{5,}$/.test(value)
+}
+
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: [3, 'Name must be at least 3 characters long'],
+    required: [true, 'Name is required']
+  },
+  number: {
+    type: String,
+    minLength: [8, 'Phone number must be at least 8 characters long'],
+    required: [true, 'Phone number is required'],
+    validate: {
+      validator: phoneValidator,
+      message: props => `${props.value} is not a valid phone number! Format must be XX-XXXXXXX or XXX-XXXXXXX`
+    }
+  }
 })
 
-// Formatage de la sortie JSON pour correspondre aux attentes du frontend
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
