@@ -47,7 +47,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   
-  // États pour la notification
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('success')
 
@@ -57,7 +56,6 @@ const App = () => {
     })
   }, [])
 
-  // Fonction utilitaire pour déclencher une notification temporaire
   const notify = (message, type = 'success') => {
     setNotificationMessage(message)
     setNotificationType(type)
@@ -95,12 +93,17 @@ const App = () => {
             setNewNumber('')
             notify(`Updated number for ${returnedPerson.name}`)
           })
-          .catch(() => {
-            notify(
-              `Information of '${existingPerson.name}' has already been removed from server`,
-              'error'
-            )
-            setPersons(persons.filter((p) => p.id !== existingPerson.id))
+          .catch((error) => {
+            // Distingue une erreur de validation (400) d'une suppression serveur (404)
+            if (error.response && error.response.status === 400) {
+              notify(error.response.data.error, 'error')
+            } else {
+              notify(
+                `Information of '${existingPerson.name}' has already been removed from server`,
+                'error'
+              )
+              setPersons(persons.filter((p) => p.id !== existingPerson.id))
+            }
           })
       }
       return
@@ -119,8 +122,10 @@ const App = () => {
         setNewNumber('')
         notify(`Added ${returnedPerson.name}`)
       })
-      .catch(() => {
-        notify(`Failed to add ${personObject.name}`, 'error')
+      .catch((error) => {
+        // Extraction du message d'erreur Mongoose envoyé par le backend
+        const errorMessage = error.response?.data?.error || `Failed to add ${personObject.name}`
+        notify(errorMessage, 'error')
       })
   }
 
@@ -150,7 +155,6 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      {/* Affichage de la notification */}
       <Notification message={notificationMessage} type={notificationType} />
 
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
