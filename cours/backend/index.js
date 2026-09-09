@@ -9,25 +9,8 @@ const Note = require('./models/note')
 app.use(cors())
 app.use(express.static('dist'))
 
-let notes = [
-  {
-    id: '1',
-    content: 'HTML is easy',
-    important: true,
-  },
-  {
-    id: '2',
-    content: 'Browser can execute only JavaScript',
-    important: false,
-  },
-  {
-    id: '3',
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    important: true,
-  },
-]
 
-const requestLogger = (request, response, next) => {
+const requestLogger = (request, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
@@ -38,11 +21,11 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 
-app.get('/', (request, response) => {
+app.get('/', (response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
+app.get('/api/notes', (response) => {
   Note.find({}).then(notes => {
     response.json(notes)
   })
@@ -53,12 +36,6 @@ app.get('/api/notes/:id', (request, response) => {
     response.json(note)
   })
 })
-
-const generateId = () => {
-  const maxId =
-    notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0
-  return String(maxId + 1)
-}
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
@@ -90,7 +67,7 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -111,13 +88,13 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
@@ -131,7 +108,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
