@@ -131,3 +131,11 @@ Aide-Mémoire Commandes Bash / Linux
   FUNCTION_NAME() {
     STATEMENTS
   }
+
+## 11. COMMENTAIRES
+  # Commentaire sur une ligne
+
+  : '
+    Commentaire sur
+    plusieurs lignes
+  '
