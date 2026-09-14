@@ -189,3 +189,31 @@ describe('most blogs', () => {
     })
   })
 })
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return null
+  }
+
+  // Calcule le total des likes par auteur
+  const likesCounts = blogs.reduce((acc, blog) => {
+    acc[blog.author] = (acc[blog.author] || 0) + blog.likes
+    return acc
+  }, {})
+
+  // Trouve l'auteur avec le nombre maximal de likes
+  let topAuthor = ''
+  let maxLikes = -1
+
+  for (const [author, likes] of Object.entries(likesCounts)) {
+    if (likes > maxLikes) {
+      maxLikes = likes
+      topAuthor = author
+    }
+  }
+
+  return {
+    author: topAuthor,
+    likes: maxLikes
+  }
+}
