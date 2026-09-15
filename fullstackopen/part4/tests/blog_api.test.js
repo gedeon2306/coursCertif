@@ -48,6 +48,23 @@ test('a valid blog can be added', async () => {
   expect(titles).toContain('Async/await simplifies async code')
 })
 
+test('if likes property is missing, it default to 0', async () => {
+  const newBlogWithoutLikes = {
+    title: 'Blog without likes',
+    author: 'jihreldev',
+    url: 'https://example.com/'
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlogWithoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body.likes).toBeDefined()
+  expect(response.body.likes).toBe(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
