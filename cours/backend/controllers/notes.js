@@ -23,12 +23,13 @@ notesRouter.post('/', (request, response, next) => {
 
   const note = new Note({
     content: body.content,
+    date: body.date || new Date(),
     important: body.important || false,
   })
 
   note.save()
     .then(savedNote => {
-      response.json(savedNote)
+      response.status(201).json(savedNote)
     })
     .catch(error => next(error))
 })
