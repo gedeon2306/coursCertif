@@ -27,7 +27,7 @@ notesRouter.get('/:id', async (request, response) => {
   }
 })
 
-notesRouter.delete('/:id', async (request, response, next) => {
+notesRouter.delete('/:id', async (request, response) => {
   await Note.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
