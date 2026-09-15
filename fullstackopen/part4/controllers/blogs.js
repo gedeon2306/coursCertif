@@ -16,8 +16,15 @@ blogsRouter.post('/', async (request, response) => {
     likes: body.likes === undefined ? 0 : body.likes
   })
 
-  const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
+  try {
+    const savedBlog = await blog.save()
+    response.status(201).json(savedBlog)
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+    }
+    throw error
+  }
 })
 
 module.exports = blogsRouter
