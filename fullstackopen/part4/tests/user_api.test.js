@@ -36,7 +36,7 @@ beforeEach(async () => {
   
   await Promise.all(promiseArray)
   await savedUser.save()
-})
+}, 15000)
 
 describe('creation of a new user', () => {
   test('fails with status code 400 if username is missing', async () => {
@@ -119,6 +119,63 @@ describe('creation of a new user', () => {
       .expect(400)
 
     expect(result.body.error).toContain('expected `username` to be unique')
+  })
+})
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if token belongs to creator', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+  })
+
+  test('fails with status code 401 if token is missing', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('fails with status code 401 if another user tries to delete the blog', async () => {
+    // Création d'un second utilisateur
+    const secondaryUser = new User({
+      username: 'otheruser',
+      passwordHash: await bcrypt.hash('otherpassword', 10)
+    })
+    await secondaryUser.save()
+
+    // Connexion du second utilisateur pour obtenir son token
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'otheruser', password: 'otherpassword' })
+
+    const otherUserToken = loginResponse.body.token
+
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    // Tentative de suppression avec le token de l'autre utilisateur
+    const result = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${otherUserToken}`)
+      .expect(401)
+
+    expect(result.body.error).toContain('only the creator can delete this blog')
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 })
 
