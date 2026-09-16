@@ -1,4 +1,5 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialBlogs = [
   {
@@ -15,12 +16,30 @@ const initialBlogs = [
   }
 ]
 
+// Génère un ID Mongoose valide mais qui n'existe dans aucune collection
+const nonExistingId = async () => {
+  const blog = new Blog({ title: 'willremovethissoon', url: 'http://temp.com' })
+  await blog.save()
+  await blog.remove()
+
+  return blog._id.toString()
+}
+
+// Récupère tous les blogs actuellement en base de données au format JSON
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
 
+// Récupère tous les utilisateurs actuellement en base de données au format JSON
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
 module.exports = {
   initialBlogs,
-  blogsInDb
+  nonExistingId,
+  blogsInDb,
+  usersInDb
 }

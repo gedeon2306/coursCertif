@@ -2,17 +2,19 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
-// GET /api/users - Récupérer tous les utilisateurs
+// GET /api/users - Récupérer les utilisateurs avec la liste de leurs blogs
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({})
+  const users = await User
+    .find({})
+    .populate('blogs', { url: 1, title: 1, author: 1 })
+
   response.json(users)
 })
 
-// POST /api/users - Créer un nouvel utilisateur
+// POST /api/users
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
-  // Validation manuelle du mot de passe (ne pas passer par Mongoose car c'est le hash qui est stocké)
   if (!password) {
     return response.status(400).json({ error: 'password is required' })
   }
