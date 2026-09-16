@@ -1,4 +1,6 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -16,6 +18,24 @@ const tokenExtractor = (request, response, next) => {
   } else {
     request.token = null
   }
+  next()
+}
+
+// Middleware pour extraire l'utilisateur à partir du token
+const userExtractor = async (request, response, next) => {
+  // Option 1 : Utilisation du token déjà extrait par tokenExtractor
+  const token = request.token
+
+  if (token) {
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (decodedToken.id) {
+      // Recherche de l'utilisateur et ajout à l'objet request
+      request.user = await User.findById(decodedToken.id)
+    }
+  } else {
+    request.user = null
+  }
+
   next()
 }
 
@@ -42,6 +62,7 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   requestLogger,
   tokenExtractor,
+  userExtractor,
   unknownEndpoint,
   errorHandler
 }
