@@ -23,15 +23,14 @@ blogsRouter.get('/', async (request, response) => {
 // POST /api/blogs - Créer un blog et l'associer à un utilisateur
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const token = getTokenFrom(request)
 
-  if (!token) {
+  if (!request.token) {
     return response.status(401).json({ error: 'token missing' })
   }
 
   let decodedToken
   try {
-    decodedToken = jwt.verify(token, process.env.SECRET)
+    decodedToken = jwt.verify(request.token, process.env.SECRET)
   } catch {
     return response.status(401).json({ error: 'token invalid' })
   }
